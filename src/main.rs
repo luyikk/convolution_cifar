@@ -1,4 +1,6 @@
 mod net;
+mod net_dropout;
+mod net_batch_norm;
 
 use anyhow::Result;
 
@@ -6,6 +8,8 @@ use crate::net::Net;
 use tch::data::Iter2;
 use tch::nn::{ModuleT, Optimizer, OptimizerConfig, VarStore};
 use tch::{nn, Device, IndexOp, Kind, Tensor};
+use crate::net_batch_norm::NetBatchNorm;
+use crate::net_dropout::NetDropout;
 
 #[allow(dead_code)]
 fn show_image(img: &Tensor) -> Result<()> {
@@ -172,6 +176,47 @@ fn main() -> Result<()> {
         "net Accuracy var:{}",
         net.batch_accuracy_for_logits(&var_img_tensor, &var_label_tensor, vs.device(), 1024)
     );
+
+    let net_dropout = NetDropout::new(&vs.root());
+
+    training_loop(
+        100,
+        vs.device(),
+        &net_dropout,
+        &train_img_tensor,
+        &train_label_tensor,
+        &mut opt,
+    );
+
+    println!(
+        "dropout Accuracy train:{}",
+        net_dropout.batch_accuracy_for_logits(&train_img_tensor, &train_label_tensor, vs.device(), 1024)
+    );
+    println!(
+        "dropout Accuracy var:{}",
+        net_dropout.batch_accuracy_for_logits(&var_img_tensor, &var_label_tensor, vs.device(), 1024)
+    );
+
+    let net_batch_norm = NetBatchNorm::new(&vs.root());
+
+    training_loop(
+        100,
+        vs.device(),
+        &net_batch_norm,
+        &train_img_tensor,
+        &train_label_tensor,
+        &mut opt,
+    );
+
+    println!(
+        "net_batch_norm Accuracy train:{}",
+        net_batch_norm.batch_accuracy_for_logits(&train_img_tensor, &train_label_tensor, vs.device(), 1024)
+    );
+    println!(
+        "net_batch_norm Accuracy var:{}",
+        net_batch_norm.batch_accuracy_for_logits(&var_img_tensor, &var_label_tensor, vs.device(), 1024)
+    );
+
 
     Ok(())
 }
