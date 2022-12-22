@@ -160,7 +160,7 @@ fn main() -> Result<()> {
     .build(&vs, 3e-3)?;
 
     training_loop(
-        100,
+        200,
         vs.device(),
         &net,
         &train_img_tensor,
@@ -180,7 +180,7 @@ fn main() -> Result<()> {
     let net_dropout = NetDropout::new(&vs.root());
 
     training_loop(
-        100,
+        200,
         vs.device(),
         &net_dropout,
         &train_img_tensor,
@@ -200,7 +200,7 @@ fn main() -> Result<()> {
     let net_batch_norm = NetBatchNorm::new(&vs.root());
 
     training_loop(
-        100,
+        200,
         vs.device(),
         &net_batch_norm,
         &train_img_tensor,
