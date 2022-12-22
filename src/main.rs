@@ -147,7 +147,6 @@ fn training_loop<T: ModuleT>(
 
 fn main() -> Result<()> {
     let vs = VarStore::new(Device::cuda_if_available());
-    tch::vision::resnet::resnet152()
     let (train_img_tensor, train_label_tensor, var_img_tensor, var_label_tensor) = load_data(&vs)?;
 
     // show_image(&train_img_tensor.i(0))?;
