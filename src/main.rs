@@ -142,7 +142,7 @@ fn training_loop<T: ModuleT>(
 }
 
 fn main() -> Result<()> {
-    let vs = nn::VarStore::new(Device::cuda_if_available());
+    let vs = VarStore::new(Device::cuda_if_available());
 
     let (train_img_tensor, train_label_tensor, var_img_tensor, var_label_tensor) = load_data(&vs)?;
 
